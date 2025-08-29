@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Password Reset</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Forgot / Reset Password</h1>
+    <div class="row">
+      <div class="card" style="flex:1">
+        <h3>Request reset link</h3>
+        <label>Email</label><input id="fp_email">
+        <button class="btn" id="btnFP">Send Link</button>
+        <div id="fp_status"></div>
+      </div>
+      <div class="card" style="flex:1">
+        <h3>Set new password</h3>
+        <label>Token (from email link)</label><input id="rp_token">
+        <label>New Password</label><input id="rp_pass" type="password">
+        <button class="btn" id="btnRP">Reset Password</button>
+        <div id="rp_status"></div>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import { apiPost } from './js/api.js';
+    const urlParams = new URLSearchParams(location.search);
+    const tokenFromURL = urlParams.get('token');
+    if (tokenFromURL) document.getElementById('rp_token').value = tokenFromURL;
+
+    document.getElementById('btnFP').onclick = async ()=>{
+      const email = document.getElementById('fp_email').value;
+      await apiPost('/api/users/forgot-password', { email });
+      document.getElementById('fp_status').textContent = 'If the email exists, a reset link was sent.';
+    };
+    document.getElementById('btnRP').onclick = async ()=>{
+      const token = document.getElementById('rp_token').value;
+      const password = document.getElementById('rp_pass').value;
+      await apiPost('/api/users/reset-password', { token, password });
+      document.getElementById('rp_status').textContent = 'Password updated. You can now login.';
+    };
+  </script>
+</body>
+</html>

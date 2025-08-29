@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Dashboard</h1>
+    <div id="me" class="card"></div>
+    <a class="button" href="./index.html" id="logout">Logout</a>
+  </div>
+  <script type="module">
+    import { apiGet, clearToken } from './js/api.js';
+    const meDiv = document.getElementById('me');
+    async function load(){
+      try{
+        const res = await apiGet('/api/users/me');
+        meDiv.innerHTML = '<pre>'+JSON.stringify(res.data, null, 2)+'</pre>';
+      }catch(e){
+        meDiv.textContent = 'Not authenticated';
+      }
+    }
+    load();
+    document.getElementById('logout').onclick = (e)=>{ clearToken(); };
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AuthSystem Pro - Landing</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>AuthSystem Pro</h1>
+    <p>Landing page with Register & Login</p>
+    <div class="row">
+      <div class="card" style="flex:1">
+        <h3>Register</h3>
+        <label>Email</label><input id="reg_email">
+        <label>Password</label><input id="reg_pass" type="password">
+        <button class="btn" id="btnRegister">Register</button>
+      </div>
+      <div class="card" style="flex:1">
+        <h3>Login</h3>
+        <label>Email</label><input id="log_email">
+        <label>Password</label><input id="log_pass" type="password">
+        <button class="btn" id="btnLogin">Login</button>
+        <div style="margin-top:8px;">
+          <a href="./reset.html">Forgot password?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import { apiPost, setToken } from './js/api.js';
+    const btnRegister = document.getElementById('btnRegister');
+    const btnLogin = document.getElementById('btnLogin');
+
+    btnRegister.onclick = async () => {
+      const email = document.getElementById('reg_email').value;
+      const password = document.getElementById('reg_pass').value;
+      const res = await apiPost('/api/users/register', { email, password });
+      setToken(res.data.token);
+      location.href = './dashboard.html';
+    };
+    btnLogin.onclick = async () => {
+      const email = document.getElementById('log_email').value;
+      const password = document.getElementById('log_pass').value;
+      const res = await apiPost('/api/users/login', { email, password });
+      setToken(res.data.token);
+      location.href = './dashboard.html';
+    };
+  </script>
+</body>
+</html>
